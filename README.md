@@ -93,6 +93,7 @@ module.exports = {
 ```   
 
 ## 配置vant
+------
 vant 是一套轻量、可靠的移动端 Vue 组件库，非常适合基于 vue 技术栈的移动端开发。   
 对于第三方 UI组件，如果是全部引入的话，会造成打包体积过大，加载首页白屏时间过长的问题，所以按需加载非常必要。vant也提供了按需加载的方法。`babel-plugin-import`是一款babel插件，它会在编译过程中将import的写法自动转换为按需引入的方式。       
 
@@ -135,4 +136,39 @@ import { Button } from 'vant'
 Vue.use(Button)
 ```   
 
+## 移动端rem适配  
+------
+移动端适配是移动开发过程中不得不面对的事情。我们可以使用 postcss中 px2rem-loader, 他会将我们项目中的px按一定比例转化为rem, 这样我们就可以用设计图设计的px来愉快的开发，无需自己进行px-rem的转化计算。    
+我们将html字跟字体设置为100px（也可以选择设置为375px）,这样0.16rem = 16px, 0.2rem= 20px（相比较设置为275px更加清晰，一目了然）。
+
+具体步骤如下：   
+1、安装依赖    
+> npm i px2rem-loader --save-dev | yarn add px2rem-loader --dev   
+
+2、在vue.config.js进行如下配置    
+```javascript
+css: {
+  // css预设器配置项
+  loaderOptions: {
+    postcss: {
+      plugins: [
+        require('postcss-px2rem')({
+          remUnit: 100
+        })
+      ]
+    }
+  }
+},
+```  
+3、在main.js设置html跟字体大小   
+```javascript
+function initRem() {
+  let cale = window.screen.availWidth > 750 ? 2 : window.screen.availWidth / 375    
+  window.document.documentElement.style.fontSize = `${100 * cale}px`
+}
+
+window.addEventListener('resize', function() {
+  initRem()
+})
+```
 
