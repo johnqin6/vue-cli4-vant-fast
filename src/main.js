@@ -3,7 +3,11 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+
 import './plugins/dom'
+// 引用工具函数
+import utils from './utils/util'
+Vue.use(utils)
 
 Vue.config.productionTip = false
 

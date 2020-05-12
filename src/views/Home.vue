@@ -10,6 +10,9 @@ export default {
   name: 'Home',
   components: {
     Button
+  },
+  mounted() {
+    console.log(this, this.isPhone)
   }
 }
 </script>
