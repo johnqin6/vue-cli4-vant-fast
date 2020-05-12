@@ -370,4 +370,80 @@ import utils from './utils/util'
 Vue.use(utils)
 ```
 
+## 命令式组件封装
+-----
+1、首先在components文件夹下新建一个toast文件夹并新建一个toast.vue文件  
 
+```html
+<template>
+  <div>
+    <transition name="fade">
+      <div class="little-tip" v-show="showLittleTip">
+        <span>{{msg}}</span>
+      </div>
+    </transition>
+  </div>
+
+</template>
+
+<script>
+export default {
+  name: 'little-tip',
+  data () {
+    return {
+      showLittleTip: true,
+      msg: '',
+      type: '',
+      duration: 1500
+    }
+  },
+  mounted () {
+    setTimeout(() => {
+      this.showLittleTip = false
+    }, this.duration)
+  }
+}
+</script>
+<style>
+  /*...*/
+</style>
+```
+
+
+2、 在components 文件夹下新建一个index.js文件
+```javascript
+import Vue from 'vue'
+import Toast from './toast.vue'
+
+const ToastConstructor = Vue.extend(Toast)
+
+let instance 
+const toast = function(options) {
+  options = options || {}
+  instance = new ToastConstructor({
+    data: options
+  })
+  instance.vm = instance.$mount()
+  document.body.appendChild(instance.vm.$el)
+  return instance.vm
+}
+export default toast
+
+```
+
+3、在main.js中引入并挂载到vue原型上      
+```javascript
+import toast from './components/toast'
+Vue.prototype.$toast = toast
+```
+
+4、在页面中使用   
+```javascript
+export default {
+  mounted() {
+    this.$toast({
+      msg: '提示消息'
+    })
+  }
+}
+```

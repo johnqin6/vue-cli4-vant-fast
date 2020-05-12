@@ -17,12 +17,13 @@ http.interceptors.request.use(
     config.headers.token = sessionStorage.getItem('token') || ''
     // 接口没返回时显示loading
     if (config.loading === true) {
-
+      vm.$loading.hide()
+      vm.$loading.show()
     }
     return config
   },
   error => {
-
+    vm.$loading.hide()
     return Promise.reject(error)
   }
 )
@@ -30,11 +31,11 @@ http.interceptors.request.use(
 // 响应拦截器
 http.interceptors.response.use(
   res => {
-
+    vm.$loading.hide()
     return res
   },
   error => {
-
+    vm.$loading.hide()
     return Promise.reject(error)
   }
 )
