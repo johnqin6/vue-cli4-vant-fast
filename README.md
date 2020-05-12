@@ -10,7 +10,25 @@
 > // 本地启动  
   npm run dev | yarn run dev  
   // 生产打包
-  npm run build | yarn run build
+  npm run build | yarn run build   
+
+主要包括技术点如下： 
+- vue-cli4脚手架
+- 多环境变量配置   
+- vant按需引入
+- 移动端rem适配
+- axios拦截封装
+- util工具类函数封装
+- vue-router配置
+- 登录权限校验
+- vue.config.js配置
+- toast组件封装
+- confirm组件封装
+- 跨域代理设置
+- webpack打包可视化分析
+- CDN资源优化
+- gzip打包优化
+- 首页添加骨架屏
 
 ## 多环境配置
 ----
@@ -74,7 +92,47 @@ module.exports = {
 }
 ```   
 
+## 配置vant
+vant 是一套轻量、可靠的移动端 Vue 组件库，非常适合基于 vue 技术栈的移动端开发。   
+对于第三方 UI组件，如果是全部引入的话，会造成打包体积过大，加载首页白屏时间过长的问题，所以按需加载非常必要。vant也提供了按需加载的方法。`babel-plugin-import`是一款babel插件，它会在编译过程中将import的写法自动转换为按需引入的方式。       
 
+1、安装依赖    
+> npm i babel-plugin-import -D | yarn add babel-plugin-import --dev    
 
+2、配置 .babelrc 或者 babel.config.js 文件
+
+```javascript
+// 在.babelrc中添加配置
+{
+  "plugins": [
+    ["import", {
+      "libraryName": "vant",
+      "libraryDirectory": "es",
+      "style": true
+    }]
+  ]
+}
+
+// 对于使用 babel7的用户，可以在 babel.config.js中配置
+module.exports = {
+  plugins: [
+    ["import", {
+      "libraryName": "vant",
+      "libraryDirectory": "es",
+      "style": true
+    }, 'vant']
+  ]
+}
+```
+
+3、 按需引入     
+在代码中直接引入 Vant组件，组件会自动通过步骤2按需引入   
+
+```javascript
+import Vue from 'vue'
+import { Button } from 'vant'
+
+Vue.use(Button)
+```   
 
 
