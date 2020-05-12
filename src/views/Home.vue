@@ -12,7 +12,7 @@ export default {
     Button
   },
   mounted() {
-    console.log(this, this.isPhone)
+    console.log(this, this.$http)
   }
 }
 </script>

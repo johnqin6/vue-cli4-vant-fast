@@ -9,6 +9,10 @@ import './plugins/dom'
 import utils from './utils/util'
 Vue.use(utils)
 
+import http from './utils/http'
+
+Vue.prototype.$http = http
+
 Vue.config.productionTip = false
 
 new Vue({
