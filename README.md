@@ -447,3 +447,59 @@ export default {
   }
 }
 ```
+
+## 使用vconsole用于移动端调试 
+-----  
+1、npm安装
+> npm install vconsole   
+2、初始化 & 配置   
+在入口文件main.js中加入以下代码    
+
+```javascript
+import Vconsole from 'vconsole';
+const vConsole = new Vconsole();
+```
+
+3、 打印日志  
+与pc端打印log一致，可直接使用console.log()等方法直接打印日志  
+> console.log('hello world')    
+
+![效果](https://img-blog.csdnimg.cn/20191212142659432.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzIyNzEzMjAx,size_16,color_FFFFFF,t_70)
+
+4、 注意
+VConsole 只是 vConsole 的原型，而非一个已实例化的对象。所以在手动 new 实例化之前，vConsole 不会被插入到网页中;
+
+未加载 vConsole 模块时，console.log() 会直接打印到原生控制台中；加载 vConsole 后，日志会打印到页面前端+原生控制台。
+
+5、配置在不同环境中判断是否显示    
+vue-cli3.0项目中让vconsole在开发环境(npm serve时)显示，生产环境(npm run build)不显示  
+> npm install vconsole-webpack-plugin --save-dev
+
+在vue.config.js配置如下代码   
+
+```javascript
+const vConsolePlugin = require('vconsole-webpack-plugin')
+  module.exports = {
+  	configureWebpack: config => {
+   		 //生产环境去掉vconsole调试器
+    	let envType = process.env.NODE_ENV != 'production'
+    	let pluginsDev = [
+     		 new vConsolePlugin({
+       			 filter: [],
+      		 	 enable: envType
+     		 })
+    	]
+ 
+    	config.plugins = [...config.plugins, ...pluginsDev]
+   	}
+  }
+```
+
+在入口文件main.js去除如下代码   
+```javascript
+// import Vconsole from 'vconsole';
+// const vConsole = new Vconsole();
+```
+
+如此就实现了开发环境显示，生产环境不显示   
+
