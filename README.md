@@ -503,3 +503,114 @@ const vConsolePlugin = require('vconsole-webpack-plugin')
 
 如此就实现了开发环境显示，生产环境不显示   
 
+## vue-router 配置 
+-------
+平时很多人对 vue-router 的配置可配置了 path 和 component，实现了路由跳转即可。其实 vue-router 可做的事情还有很多，比如      
+- 路由懒加载配置
+- 改变单页面应用的 title
+- 登录权限检验
+- 页面缓存配置  
+
+### 路由懒加载配置
+
+vue项目中实现路由懒加载（按需加载）的3种方式：   
+```javascript
+// 1、vue异步组件技术
+{
+  path: '/home',
+  name: '/Home',
+  component: resolve => require(['../views/Home.vue'], resolve)
+}
+// 2、es6提案的import()
+{
+  path: '/home',
+  name: '/Home',
+  component: import('../views/Home.vue')
+}
+// 3、webpack提供的require.ensure()
+{
+  path: '/home',
+  name: '/Home',
+  component: r => require.ensure([], () => r(require('../views/Home.vue')), 'home')
+}
+```     
+
+本项目使用的是第二种方式，为了后续webpack打包优化   
+
+### 单页面应用的页面标题  
+由于单页面应用只有一个html,所有页面的title标题默认都是不会变化，但是我们可以通过路由配置添加相关属性并在路由守卫中手动修改页面的title。   
+```javascript
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+})
+```   
+
+### 登录权限校验
+在应用中，通常会有以下的场景，比如商城，有些页面是不需要客户登录即可访问，例如首页，商品详情页等，但是也有部分页面需要客户登录后才能访问，例如个人中心，购物车等，这时就需要对页面进行权限控制了。         
+此外，有一些记录用户信息和登录状态的项目，也是需要做登陆权限校验的，以防别有用心的人通过直接访问页面的url打开页面。   
+此时，路由守卫可以帮助我们做登录校验。     
+1、配置路由的meta对象的auth属性    
+
+```javascript
+const routes = [{
+  path: '/home',
+  name: '/Home',
+  component: import('../views/Home.vue'),
+  meta: {title: '首页', keepAlive: false, auth: false}
+},{
+  path: '/mine',
+  name: '/Mine',
+  component: import('../views/Mine.vue'),
+  meta: {title: '我的', keepAlive: false, auth: true}
+}]
+```      
+
+2、在路由首页进行判断。当`to.meta.auth`为`true`(需要登录),且不存在登录信息缓存时，需要重定向去登录页面      
+
+```javascript
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title;
+  const userInfo = sessionStorage.getItem('userInfo') || null
+  if (!userInfo && to.meta.auth) {
+    next('/login')
+  } else {
+    next()
+  }
+})
+```     
+
+### 页面缓存配置  
+项目中，总有一些页面我们是希望加载一次就缓存下来的，此时就用到keep-alive了。keep-alive是Vue提供的一个抽象组件，用来对组件进行缓存，来节约性能，由于是一个抽象组件，所以在vue页面渲染完毕后不会被渲染成一个DOM元素。    
+1、通过配置路由的meta对象的 keepAlive属性值来区分页面是否需要缓存   
+
+```javascript
+const routes = [{
+  path: '/home',
+  name: '/Home',
+  component: import('../views/Home.vue'),
+  meta: {title: '首页', keepAlive: false, auth: false}
+},{
+  path: '/mine',
+  name: '/Mine',
+  component: import('../views/Mine.vue'),
+  meta: {title: '我的', keepAlive: false, auth: true}
+}]
+```    
+2、在app.vue做缓存判断    
+
+```html
+<div id="app">
+  <router-view v-if="!$route.meta.keepAlibe"/>
+  <keep-alibe>
+    <router-view v-if="!$route.meta.keepAlibe"/>
+  </keep-alibe>
+</div>
+```   
+
+## webpack可视化分析   
+从这里开始，我们开始进行webpack优化打包。首先我们来分析一下webpack打包性能瓶颈，
+找出问题所在，然后才能对症下药。此时就用到webpack-bundle-analyzer.      
+1、安装依赖    
+> npm i webpack-bundle-analyzer -D || yarn add  webpack-bundle-analyzer -D   
+
+2、在vue.config.js配置

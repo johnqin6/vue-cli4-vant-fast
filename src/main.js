@@ -14,12 +14,16 @@ import './plugins/dom'
 import './utils/fastClick'
 // 引用工具函数
 import utils from './utils/util'
+import VueScroller from 'vue-scroller'
+
 Vue.use(utils)
+Vue.use(VueScroller)
 
 import http from './utils/http'
 import loading from './components/loading'
 import toast from './components/toast'
 import comfirm from './components/comfirm'
+
 
 Vue.prototype.$http = http
 Vue.prototype.$loading = loading
@@ -27,6 +31,16 @@ Vue.prototype.$toast = toast
 Vue.prototype.$comfirm = comfirm
 
 Vue.config.productionTip = false
+
+router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+  const userInfo = sessionStorage.getItem('userInfo') || null
+  if (!userInfo && to.mete.auth) {
+    next('/login')
+  } else {
+    next()
+  }
+})
 
 export default new Vue({
   router,
