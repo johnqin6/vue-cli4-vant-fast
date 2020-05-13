@@ -613,4 +613,23 @@ const routes = [{
 1、安装依赖    
 > npm i webpack-bundle-analyzer -D || yarn add  webpack-bundle-analyzer -D   
 
-2、在vue.config.js配置
+2、在vue.config.js配置    
+```javascript
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
+configureWebpack: (config) => {
+  // webpack可视化分析 打包后会看到依赖图
+  if (process.env.NODE_ENV === 'production') {
+    config.plugins.push(new BundleAnalyzerPlugin())
+  }
+},
+```    
+包后会看到依赖图如下：   
+![图片](https://user-gold-cdn.xitu.io/2020/5/10/171fc78ad5a37759?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)    
+
+从以上的界面中，我们可以得到以下信息：
+
+- 打包出的文件中都包含了什么，以及模块之间的依赖关系
+- 每个文件的大小在总体中的占比，找出较大的文件，思考是否有替换方案，是否使用了它包含了不必要的依赖？
+- 是否有重复的依赖项，对此可以如何优化？
+- 每个文件的压缩后的大小。
+
