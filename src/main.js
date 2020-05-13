@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
   if (!userInfo && to.meta.auth) {
     next('/login')
   } else {
-    console.log(111)
     next()
   }
 })

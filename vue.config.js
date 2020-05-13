@@ -2,9 +2,7 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const CompressionPlugin = require('compression-webpack-plugin') // 引入gzip压缩插件
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
-console
 function resolve(dir) {
-  console.log(dir)
   return path.join(__dirname, dir)
 }
 module.exports = {
@@ -16,27 +14,27 @@ module.exports = {
   runtimeCompiler: false,
   // 默认情况下 babel-loader 会忽略所有 node_modules 中的文件。如果你想要通过 Babel 显式转译一个依赖，可以在这个选项中列出来。
   transpileDependencies: [],
-  // 生产环境关闭 source map
+  //生产环境关闭 source map
   productionSourceMap: false,
   // lintOnSave: true,
   // 配置css
-  css: {
-    // 是否使用css分离插件 ExtractTextPlugin
-    extract: true,
-    sourceMap: true,
-    // css预设器配置项
-    loaderOptions: {
-      postcss: {
-        plugins: [
-          require('postcss-px2rem')({
-            remUnit: 100
-          })
-        ]
-      }
-    },
-    // 启用 CSS modules for all css / pre-processor files.
-    modules: false
-  },
+  // css: {
+  //   // 是否使用css分离插件 ExtractTextPlugin
+  //   extract: true,
+  //   sourceMap: true,
+  //   // css预设器配置项
+  //   loaderOptions: {
+  //     postcss: {
+  //       plugins: [
+  //         require('postcss-px2rem')({
+  //           remUnit: 100
+  //         })
+  //       ]
+  //     }
+  //   },
+  //   // 启用 CSS modules for all css / pre-processor files.
+  //   modules: false
+  // },
 
   // 是一个函数，允许内部的webpack 配置进行更细粒度的修改
   chainWebpack: (config) => {
@@ -96,18 +94,22 @@ module.exports = {
     }
   },
   // 是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。
-  parallel: require('os').cpus().length > 1,
-
+  // parallel: require('os').cpus().length > 1,
+  
+  // 向pwa插件传递选项
+  // https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
+  pwa: {},
   devServer: {
-    host: 'http://172.30.48.119',
+    // host: 'http://172.30.48.119',
+    host: 'localhost',
     port: 8088, // 端口号
     https: false,
-    open: false, // 配置自动启动浏览器  open: 'Google Chrome'-默认启动谷歌
+    open: true, // 配置自动启动浏览器  open: 'Google Chrome'-默认启动谷歌
 
     // 配置多个代理
     proxy: {
       '/api': {
-        target: 'https://www.mock.com',
+        target: 'http://localhost:3000/',
         ws: true, // 代理的webSockets
         changeOrigin: true, // 允许websockets跨域
         pathRewrite: {
