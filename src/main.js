@@ -34,10 +34,11 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
-  const userInfo = sessionStorage.getItem('userInfo') || null
-  if (!userInfo && to.mete.auth) {
+  const userInfo = localStorage.getItem('userInfo') || null
+  if (!userInfo && to.meta.auth) {
     next('/login')
   } else {
+    console.log(111)
     next()
   }
 })

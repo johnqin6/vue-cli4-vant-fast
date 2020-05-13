@@ -2,8 +2,9 @@ const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const CompressionPlugin = require('compression-webpack-plugin') // 引入gzip压缩插件
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
-
+console
 function resolve(dir) {
+  console.log(dir)
   return path.join(__dirname, dir)
 }
 module.exports = {
@@ -52,11 +53,46 @@ module.exports = {
       return args
     })
   },
-
+  // configureWebpack: {
+  //   plugins: [
+  //     // brotli压缩
+  //     new CompressionPlugin({
+  //       filename: '[path].br[query]',
+  //       algorithm: 'brotliCompress', // 压缩算法
+  //       test: /\.(js|css|html|svg)$/, // 匹配文件名
+  //       compressionOptions: {level: 11},
+  //       threshold: 10240, // 对超过10kb的数据进行压缩
+  //       deleteOriginAssets: false // 是否删除原文件
+  //     })
+  //   ]
+  // },
   configureWebpack: (config) => {
-    // webpack可视化分析 打包后会看到依赖图
+    // 首页骨架屏
+    config.plugins.push(new SkeletonWebpackPlugin({
+      webpackConfig: {
+        entry: {
+          app: path.join(__dirname, './src/common/entry-skeleton.js')
+        }
+      },
+      minimize: true,
+      quiet: true,
+      router: {
+        mode: 'hash',
+        routes: [
+          {path: '/', skeletonId: 'skeleton1'},
+          {path: '/about', skeletonId: 'skeleton2'}
+        ]
+      }
+    }))
     if (process.env.NODE_ENV === 'production') {
+      // webpack可视化分析 打包后会看到依赖图
       config.plugins.push(new BundleAnalyzerPlugin())
+      // gzip压缩
+      config.plugins.push(new CompressionPlugin({
+        test: /\.js$|\.html$|\.css/, // 匹配文件名
+        threshold: 10240, // 对超过10kb的数据进行压缩
+        deleteOriginAssets: false // 是否删除原文件
+      }))
     }
   },
   // 是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。

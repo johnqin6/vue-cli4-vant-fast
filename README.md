@@ -14,21 +14,22 @@
 
 主要包括技术点如下： 
 - vue-cli4脚手架
-- 多环境变量配置   
-- vant按需引入
-- 移动端rem适配
-- vue.config.js配置
+- [多环境变量配置](#多环境配置)   
+- [vant按需引入](#配置vant)
+- [移动端rem适配](#移动端rem适配)
+- [vue.config.js配置](#vue.config.js配置)
 - 跨域代理设置
-- axios拦截封装
-- util工具类函数封装
-- vue-router配置
+- [axios拦截封装](#axios请求封装)
+- [util工具类函数封装](#工具类函数封装)
+- [vue-router配置](#vue-router配置)
 - 登录权限校验
-- toast组件封装
-- confirm组件封装
-- webpack打包可视化分析
-- CDN资源优化
-- gzip打包优化
-- 首页添加骨架屏
+- [toast组件封装](#命令式组件封装)
+- [confirm组件封装](#命令式组件封装)
+- [使用vconsole用于移动端调试](#使用vconsole用于移动端调试)
+- [webpack打包可视化分析](#webpack可视化分析)
+- [CDN资源优化](#CDN资源优化)
+- [gzip打包优化](#gzip打包优化) 
+- [首页添加骨架屏](#首页添加骨架屏)
 
 ## 多环境配置
 ----
@@ -172,7 +173,7 @@ window.addEventListener('resize', function() {
 })
 ```  
 
-## vue.config.js 配置
+## vue.config.js配置
 -------
 从vue-cli3开始，新建的脚手架都需要我们在 vue.config.js配置我们项目的东西。主要包括：   
 - 打包后文件输出位置
@@ -264,7 +265,7 @@ module.exports = {
 
 ```
 
-## axios 请求封装
+## axios请求封装
 ------
 1、设置请求拦截和响应拦截   
 ```javascript
@@ -503,7 +504,7 @@ const vConsolePlugin = require('vconsole-webpack-plugin')
 
 如此就实现了开发环境显示，生产环境不显示   
 
-## vue-router 配置 
+## vue-router配置 
 -------
 平时很多人对 vue-router 的配置可配置了 path 和 component，实现了路由跳转即可。其实 vue-router 可做的事情还有很多，比如      
 - 路由懒加载配置
@@ -672,4 +673,9 @@ module.exports = {
 当然，当引入其他较大第三方资源，比如 echarts，AMAP(高德地图)，采用 CDN 资源还是很有必要的。
 
 
+## gzip打包优化
+所有现在浏览器都支持gzip压缩，启用gzip压缩可大幅度缩减传输资源大小，从而缩短资源下载时间，减少首次白屏时间，提升用户体验。  
+gzip对基于文本格式文件的压缩效果最好(如js,css和html)，在压缩较大文件时往往可实现70-90%的压缩率，对已经压缩过的资源(如：图片)进行gzip压缩处理，效果很不好。    
+```javascript
 
+```

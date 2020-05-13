@@ -1,51 +1,57 @@
 <template>
   <div class="home">
-    <Button type="info" @click="showToast">显示提示按钮</Button>
-    <Button type="info" @click="showLoading">显示加载按钮</Button>
-    <Button type="info" @click="hideLoading">显示加载按钮</Button>
-    <Button type="info" @click="showComfirm">显示确认选择框按钮</Button>
+    <div class="list">
+      <div class="listItem" v-for="(item, index) in list" :key="index">
+        {{ item.name }}
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { Button } from 'vant'
+// import toast from 'components/toast/src/toast';
 export default {
   name: 'Home',
-  components: {
-    Button
+  data() {
+    return {
+      list: [
+        { name: 'vue-cli4脚手架' },
+        { name: 'vant按需引入' },
+        { name: '移动端rem适配' },
+        { name: 'axios拦截封装' },
+        { name: 'util工具类函数封装' },
+        { name: 'vue-router配置' },
+        { name: '登录权限校验' },
+        { name: '多环境变量配置' },
+        { name: 'vue.config.js配置' },
+        { name: 'toast组件封装' },
+        { name: 'dialog组件封装' },
+        { name: '跨域代理设置' },
+        { name: 'webpack打包可视化分析' },
+        { name: 'CDN资源优化' },
+        { name: 'gzip打包优化' },
+        { name: '首页添加骨架屏' }
+      ]
+    }
   },
   mounted() {
     console.log(this, this.$http)
   },
-  methods: {
-    showToast() {
-      this.$toast({
-        msg: '提示',
-        type: 'loading'
-      })
-    },
-    showLoading() {
-      console.log(this.$loading);
-      this.$loading.show();
-      setTimeout(() => {
-        this.$loading.hide();
-      }, 2000)
-    },
-    hideLoading() {
-      this.$loading.hide();
-    },
-    showComfirm() {
-      this.$comfirm({
-        title: '标题',
-        text: '文本',
-        confirm () {
-          console.log('确定')
-        },
-        cancel() {
-          console.log('取消')
-        }
-      });
-    }
-  }
 }
 </script>
+<style lang="less" scoped>
+.list {
+  height: 100%;
+  width: 100%;
+  .listItem {
+    width: 100%;
+    padding: 0 15px;
+    height: 45px;
+    line-height: 45px;
+    position: relative;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+}
+</style>
