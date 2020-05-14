@@ -8,7 +8,7 @@
         {{ tab.title}}
       </van-tab>
     </van-tabs>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 <script>

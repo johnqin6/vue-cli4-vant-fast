@@ -9,7 +9,7 @@
 </template>
 
 <script>
-// import toast from 'components/toast/src/toast';
+
 export default {
   name: 'Home',
   data() {

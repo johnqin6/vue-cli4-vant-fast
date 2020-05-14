@@ -5,6 +5,9 @@ const app = express();
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
+// 静态资源
+app.use(express.static('www'))
+
 // 引入路由文件
 const user = require('./routers/api/user')
 const demo = require('./routers/api/demo')
