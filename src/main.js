@@ -10,6 +10,7 @@ import './assets/styles/reset.css'
 import './assets/styles/common.css'
 import './assets/iconfont/icon.css'
 import './plugins/dom'
+import './plugins/vant'
 
 import './utils/fastClick'
 // 引用工具函数
@@ -25,10 +26,11 @@ import toast from './components/toast'
 import comfirm from './components/comfirm'
 
 
-Vue.prototype.$http = http
+
 Vue.prototype.$loading = loading
 Vue.prototype.$toast = toast
 Vue.prototype.$comfirm = comfirm
+Vue.prototype.$http = http
 
 Vue.config.productionTip = false
 
@@ -43,7 +45,8 @@ router.beforeEach((to, from, next) => {
 })
 
 export default new Vue({
+  el: '#app',
   router,
   store,
   render: h => h(App)
-}).$mount('#app')
+})

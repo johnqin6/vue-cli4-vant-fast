@@ -34,13 +34,8 @@ export default {
       ]
     }
   },
-  mounted() {
-    console.log(this, this.$http)
-    this.$http.get('/test').then(res => {
-      console.log(res)
-    }).catch(err => {
-      console.log(err)
-    })
+  async mounted() {
+    
   },
 }
 </script>

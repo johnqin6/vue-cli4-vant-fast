@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import Skeleton1 from './Skeleton1'
-import Skeleton2 from './Skeleton2'
+import Skeleton1 from './Skeletion1'
+import Skeleton2 from './Skeletion2'
 
 export default new Vue({
   components: {

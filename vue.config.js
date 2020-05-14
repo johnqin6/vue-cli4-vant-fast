@@ -1,7 +1,10 @@
+
 const path = require('path')
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer')
 const CompressionPlugin = require('compression-webpack-plugin') // 引入gzip压缩插件
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin')
+const { baseApi } = require('./config')
+
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
@@ -18,23 +21,23 @@ module.exports = {
   productionSourceMap: false,
   // lintOnSave: true,
   // 配置css
-  // css: {
-  //   // 是否使用css分离插件 ExtractTextPlugin
-  //   extract: true,
-  //   sourceMap: true,
-  //   // css预设器配置项
-  //   loaderOptions: {
-  //     postcss: {
-  //       plugins: [
-  //         require('postcss-px2rem')({
-  //           remUnit: 100
-  //         })
-  //       ]
-  //     }
-  //   },
-  //   // 启用 CSS modules for all css / pre-processor files.
-  //   modules: false
-  // },
+  css: {
+    // 是否使用css分离插件 ExtractTextPlugin
+    extract: true,
+    sourceMap: true,
+    // css预设器配置项
+    loaderOptions: {
+      postcss: {
+        plugins: [
+          require('postcss-px2rem')({
+            remUnit: 100
+          })
+        ]
+      }
+    },
+    // 启用 CSS modules for all css / pre-processor files.
+    modules: false
+  },
 
   // 是一个函数，允许内部的webpack 配置进行更细粒度的修改
   chainWebpack: (config) => {
@@ -60,7 +63,7 @@ module.exports = {
   //       test: /\.(js|css|html|svg)$/, // 匹配文件名
   //       compressionOptions: {level: 11},
   //       threshold: 10240, // 对超过10kb的数据进行压缩
-  //       deleteOriginAssets: false // 是否删除原文件
+  //       deleteOriginalAssets: false // 是否删除原文件
   //     })
   //   ]
   // },
@@ -84,36 +87,44 @@ module.exports = {
     }))
     if (process.env.NODE_ENV === 'production') {
       // webpack可视化分析 打包后会看到依赖图
-      config.plugins.push(new BundleAnalyzerPlugin())
+      // config.plugins.push(new BundleAnalyzerPlugin())
       // gzip压缩
       config.plugins.push(new CompressionPlugin({
         test: /\.js$|\.html$|\.css/, // 匹配文件名
         threshold: 10240, // 对超过10kb的数据进行压缩
-        deleteOriginAssets: false // 是否删除原文件
+        deleteOriginalAssets: false // 是否删除原文件
       }))
     }
   },
   // 是否为 Babel 或 TypeScript 使用 thread-loader。该选项在系统的 CPU 有多于一个内核时自动启用，仅作用于生产构建。
-  // parallel: require('os').cpus().length > 1,
+  parallel: require('os').cpus().length > 1,
   
   // 向pwa插件传递选项
   // https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-pwa
   pwa: {},
   devServer: {
     // host: 'http://172.30.48.119',
-    host: 'localhost',
-    port: 8088, // 端口号
+    host: '0.0.0.0',
+    port: 8081, // 端口号
     https: false,
-    open: true, // 配置自动启动浏览器  open: 'Google Chrome'-默认启动谷歌
+    open: false, // 配置自动启动浏览器  open: 'Google Chrome'-默认启动谷歌
 
     // 配置多个代理
     proxy: {
       '/api': {
-        target: 'http://localhost:3000/',
+        target: baseApi,
         ws: true, // 代理的webSockets
         changeOrigin: true, // 允许websockets跨域
         pathRewrite: {
-          '^/api': ''
+          '^/api': '/api'
+        }
+      },
+      '/token': {
+        target: baseApi,
+        ws: true, // 代理的webSockets
+        changeOrigin: true, // 允许websockets跨域
+        pathRewrite: {
+          '^/token': '/token'
         }
       }
     }

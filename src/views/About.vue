@@ -1,17 +1,14 @@
 <template>
   <div class="about">
-    <Button type="info" @click="showToast">显示提示按钮</Button>
-    <Button type="info" @click="showLoading">显示加载按钮</Button>
-    <Button type="info" @click="hideLoading">显示加载按钮</Button>
-    <Button type="info" @click="showComfirm">显示确认选择框按钮</Button>
+    <van-button type="info" @click="showToast">显示提示按钮</van-button>
+    <van-button type="info" @click="showLoading">显示加载按钮</van-button>
+    <van-button type="info" @click="hideLoading">显示加载按钮</van-button>
+    <van-button type="info" @click="showComfirm">显示确认选择框按钮</van-button>
   </div>
 </template>
 <script>
-import { Button } from 'vant'
+
 export default {
-  components: {
-    Button
-  },
   methods: {
     showToast() {
       this.$toast({

@@ -1,13 +1,54 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <van-tabs v-model="active" @click="changeTab">
+      <van-tab 
+        v-for="(tab,index) in tabList" 
+        :title="tab.title" 
+        :key="index">
+        {{ tab.title}}
+      </van-tab>
+    </van-tabs>
     <router-view/>
   </div>
 </template>
-
+<script>
+export default {
+  data() {
+    return {
+      active: 0,
+      tabList: [
+        { title: '首页' },
+        { title: '接口测试' },
+        { title: '提示测试' },
+        { title: '其他' }
+      ],
+    }
+  },
+  methods: {
+    changeTab() {
+      switch(this.active) {
+        case 0:
+          this.goPage('home');
+          break;
+        case 1:
+          this.goPage('apiDemo');
+          break;
+        case 2:
+          this.goPage('about');
+          break;
+        case 3:
+          this.goPage();
+          break;
+      }
+    },
+    goPage(pathName) {
+      this.$router.push({
+        name: pathName
+      })
+    }
+  }
+}
+</script>
 <style lang="less">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
